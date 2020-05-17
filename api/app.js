@@ -5,6 +5,10 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var logger = require('morgan');
 
+const db = require('./config/database');
+
+db.connect();
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
