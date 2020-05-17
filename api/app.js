@@ -60,6 +60,19 @@ app.get('/places', (req, res) => {
         })
 });
 
+app.get('/places/:id', (req, res) => {
+    //res.json(req.params.id)
+    //Place.findOne({})
+    Place.findById(req.params.id)
+        .then(doc => {
+            res.json(doc);
+        })
+        .catch(err => {
+            console.log(err);
+            res.json(err);
+        })
+})
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     next(createError(404));
