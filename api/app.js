@@ -86,8 +86,8 @@ app.put('/places/:id', (req, res) => {
         if (Object.prototype.hasOwnProperty.call(req.body, attr))
             placeParams[attr] = req.body[attr];
     });
-
-    Place.update({ '_id': req.params.id }, placeParams)
+    //methods: update, findOneAndUpdate , findByIdAndUpdate
+    Place.findOneAndUpdate({ '_id': req.params.id }, placeParams, { new: true })
         .then(doc => {
             res.json(doc);
         })
@@ -96,6 +96,17 @@ app.put('/places/:id', (req, res) => {
             res.json(err);
         })
 
+})
+
+app.delete('/places/:id', (req, res) => {
+    Place.findByIdAndRemove(req.params.id)
+        .then(doc => {
+            res.json({})
+        })
+        .catch(err => {
+            console.log(err);
+            res.json(err);
+        })
 })
 
 // catch 404 and forward to error handler
