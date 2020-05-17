@@ -5,12 +5,14 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var logger = require('morgan');
 
+const Place = require('./models/Place');
+
 const db = require('./config/database');
 
 db.connect();
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+//var indexRouter = require('./routes/index');
+//var usersRouter = require('./routes/users');
 
 var app = express();
 
@@ -26,8 +28,24 @@ app.use(bodyParser.urlencoded({ extended: false }));
 //app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+//app.use('/', indexRouter);
+//app.use('/users', usersRouter);
+//
+app.post('/places', (req, res) => {
+    Place.create({
+            title: 'Office',
+            description: 'Lorem',
+            acceptsCreditCard: true,
+            openHour: 0,
+            closeHour: 24
+        })
+        .then(doc => {
+            res.json(doc)
+        }).catch(err => {
+            console.log(err);
+            res.json(err);
+        });
+})
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
