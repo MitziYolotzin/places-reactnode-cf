@@ -33,11 +33,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 //
 app.post('/places', (req, res) => {
     Place.create({
-            title: 'Office',
-            description: 'Lorem',
-            acceptsCreditCard: true,
-            openHour: 0,
-            closeHour: 24
+            title: req.body.title,
+            description: req.body.description,
+            acceptsCreditCard: req.body.acceptsCreditCard,
+            openHour: req.body.openHour,
+            closeHour: req.body.closeHour
         })
         .then(doc => {
             res.json(doc)
@@ -45,7 +45,20 @@ app.post('/places', (req, res) => {
             console.log(err);
             res.json(err);
         });
-})
+});
+
+app.get('/places', (req, res) => {
+    Place.find({
+
+        })
+        .then(docs => {
+            res.json(docs);
+        })
+        .catch(err => {
+            console.log(err);
+            res.json(err);
+        })
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
