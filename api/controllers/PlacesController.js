@@ -2,9 +2,9 @@ const Place = require('../models/Place');
 
 function index(req, res) {
     //all places
-    Place.find({
-
-        })
+    //if req query params return false, then pass to next
+    //if req query params return true, then send key to page
+    Place.paginate({}, { page: req.query.page || 1, limit: 8, sort: { '_id': -1 } })
         .then(docs => {
             res.json(docs);
         })

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate');
 
 //first schema and then model
 //schema-info of objects to save in db, validations, virtuals...
@@ -18,6 +19,8 @@ let placeSchema = new mongoose.Schema({
     openHour: Number,
     closeHour: Number
 });
+
+placeSchema.plugin(mongoosePaginate);
 
 let Place = mongoose.model('Place', placeSchema);
 
