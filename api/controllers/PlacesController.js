@@ -1,5 +1,17 @@
 const Place = require('../models/Place');
 
+//middleware
+function find(req, res, next) {
+    Place.findById(req.params.id)
+        .then(place => {
+            req.place = place;
+            next();
+        })
+        .catch(err => {
+            next(err);
+        });
+}
+
 function index(req, res) {
     //all places
     //if req query params return false, then pass to next
@@ -34,14 +46,7 @@ function create(req, res) {
 
 function show(req, res) {
     //individual search
-    Place.findById(req.params.id)
-        .then(doc => {
-            res.json(doc);
-        })
-        .catch(err => {
-            console.log(err);
-            res.json(err);
-        })
+    res.json(req.place);
 
 }
 
@@ -54,9 +59,11 @@ function update(req, res) {
         if (Object.prototype.hasOwnProperty.call(req.body, attr))
             placeParams[attr] = req.body[attr];
     });
-    //methods: update, findOneAndUpdate , findByIdAndUpdate
-    Place.findOneAndUpdate({ '_id': req.params.id }, placeParams, { new: true })
-        .then(doc => {
+    //properties of placeparamas, and copy to obj req.place
+    req.place = Object.assign(req.place, placeParams);
+
+
+    req.place.save().then(doc => {
             res.json(doc);
         })
         .catch(err => {
@@ -66,8 +73,8 @@ function update(req, res) {
 }
 
 function destroy(req, res) {
-    //delete resource
-    Place.findByIdAndRemove(req.params.id)
+    //delete resources
+    req.place.remove()
         .then(doc => {
             res.json({})
         })
@@ -78,4 +85,4 @@ function destroy(req, res) {
 
 }
 
-module.exports = { index, show, create, destroy, update };
+module.exports = { index, show, create, destroy, update, find };
