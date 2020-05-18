@@ -53,10 +53,14 @@ function show(req, res) {
 function update(req, res) {
     //update new resource
 
-
+    let attributes = ['title', 'description', 'acceptsCreditCard', 'openHour', 'closeHour'];
+    let placeParams = {};
+    attributes.forEach(attr => {
+        if (Object.prototype.hasOwnProperty.call(req.body, attr))
+            placeParams[attr] = req.body[attr];
+    });
     //properties of placeparamas, and copy to obj req.place
-    req.place = Object.assign(req.place, req.body);
-
+    req.place = Object.assign(req.place, placeParams);
 
 
     req.place.save().then(doc => {
